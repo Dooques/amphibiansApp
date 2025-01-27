@@ -2,4 +2,9 @@
     <string name="app_name">Amphibians</string>
     <string name="ipsum_passage">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
     <string name="cartoon_frog">Cartoon Frog</string>
+    <string name="something_has_gone_wrong">Something has gone wrong…</string>
+    <string name="click_below_to_try_again">Click below to try again</string>
+    <string name="buffering">Hang on a sec!</string>
+    <string name="buffering_desc">We\'re just getting this ready for you…</string>
+    <string name="blank"> </string>
 </resources>
