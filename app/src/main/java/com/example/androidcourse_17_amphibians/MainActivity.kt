@@ -48,7 +48,9 @@ fun AmphibiansApp() {
             .fillMaxSize()
             .padding(paddingValues)
         ) {
-            val amphibianViewModel: AmphibianViewModel = viewModel()
+            val amphibianViewModel: AmphibianViewModel = viewModel(
+                factory = AmphibianViewModel.Factory
+            )
             HomeScreen(
                 amphibianUiState = amphibianViewModel.amphibianUiState,
             )

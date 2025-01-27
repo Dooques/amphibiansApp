@@ -1,7 +1,6 @@
 package com.example.androidcourse_17_amphibians.ui.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,16 +21,20 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.androidcourse_17_amphibians.AmphibiansTopBar
+import com.example.androidcourse_17_amphibians.R
 import com.example.androidcourse_17_amphibians.data.TemporaryDataSource
 import com.example.androidcourse_17_amphibians.model.AmphibianCard
+import com.example.androidcourse_17_amphibians.model.TempCard
 import com.example.androidcourse_17_amphibians.ui.theme.AmphibiansTheme
 
 @Composable
@@ -55,7 +58,6 @@ fun HomeScreen(
 }
 
 
-
 @Composable
 fun LazyFrogColumn(
     frogCards: List<AmphibianCard>,
@@ -64,7 +66,7 @@ fun LazyFrogColumn(
     LazyColumn {
         items(
             items = frogCards,
-            key = {item -> item.id}
+            key = {item -> item.name}
         ) { item ->
             FrogCard(
                 amphibian = item,
@@ -90,12 +92,53 @@ fun FrogCard(
     ) {
         Column {
             Text(
+                text = amphibian.name,
+                fontSize = 32.sp,
+                modifier = modifier.padding(vertical = 8.dp, horizontal = 16.dp)
+            )
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(amphibian.imgUrl)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = amphibian.name,
+                error = painterResource(R.drawable.sad_frog),
+                placeholder = painterResource(R.drawable.frogbuffer),
+                contentScale = ContentScale.Crop,
+                modifier = modifier.aspectRatio(16f / 9f)
+            )
+            Text(
+                text = amphibian.description,
+                fontSize = 16.sp,
+                modifier = modifier.padding(
+                    bottom = 8.dp,
+                    start = 16.dp,
+                    )
+            )
+        }
+    }
+}
+
+
+@Composable
+fun TempCard(
+    amphibian: TempCard,
+    modifier: Modifier = Modifier
+) {
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        Column {
+            Text(
                 text = stringResource(amphibian.name),
                 fontSize = 32.sp,
                 modifier = modifier.padding(vertical = 8.dp, horizontal = 16.dp)
             )
+
             Image(
-                painter = painterResource(amphibian.imgUrl),
+                painter = painterResource(amphibian.image),
                 contentDescription = "Cartoon Frog",
                 contentScale = ContentScale.Crop,
                 modifier = modifier.aspectRatio(16f / 9f)
@@ -106,7 +149,7 @@ fun FrogCard(
                 modifier = modifier.padding(
                     bottom = 8.dp,
                     start = 16.dp,
-                    )
+                )
             )
         }
     }
@@ -131,7 +174,7 @@ fun ResultsScreen(
 
 @Composable
 fun ErrorScreen(
-    frogCard: AmphibianCard,
+    frogCard: TempCard,
     modifier: Modifier = Modifier
 ) {
     Box (
@@ -142,7 +185,7 @@ fun ErrorScreen(
             verticalArrangement = Arrangement.spacedBy(32.dp),
             modifier = Modifier.padding(8.dp)
         ) {
-            FrogCard(
+            TempCard(
                 amphibian = frogCard,
                 modifier = modifier
             )
@@ -161,7 +204,7 @@ fun ErrorScreen(
 
 @Composable
 fun BufferScreen(
-    frogCard: AmphibianCard,
+    frogCard: TempCard,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -172,30 +215,10 @@ fun BufferScreen(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(8.dp)
         ) {
-        FrogCard(
+        TempCard(
             amphibian = frogCard,
                 modifier = Modifier.padding(8.dp)
             )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    AmphibiansTheme {
-        Scaffold {
-            Surface(
-                Modifier
-                    .fillMaxSize()
-                    .padding(it)
-                    .background(Color.White)
-            ) {
-                ResultsScreen(
-                    TemporaryDataSource().frogList,
-                    modifier = Modifier
-                    )
-            }
         }
     }
 }
